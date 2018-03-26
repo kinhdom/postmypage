@@ -1,0 +1,16 @@
+<button class="btn btn-primary" (click)="isAdd = !isAdd"> Add </button>
+<form #formvalue="ngForm" (ngSubmit)="onFormSubmit(formvalue)" *ngIf="isAdd">
+  <div class="input-group">
+    <div class="input-group-prepend">
+      <span class="input-group-text">Code</span>
+    </div>
+    <textarea class="form-control" aria-label="With textarea" cols="10" rows="5" name="code" [(ngModel)]="code"></textarea>
+  </div>
+  <button type="submit" class="btn btn-primary">Submit</button>
+</form>
+
+<ul>
+  <li *ngFor="let page of arrPages">
+    {{page.name}}
+  </li>
+</ul>

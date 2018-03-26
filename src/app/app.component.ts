@@ -1,4 +1,5 @@
 import { Component } from '@angular/core';
+import {NgxUIModule} from '@swimlane/ngx-ui';
 
 @Component({
   selector: 'app-root',

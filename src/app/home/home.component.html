@@ -1,0 +1,44 @@
+<form #form="ngForm" (ngSubmit)="onFormSubmit(form)">
+  <div class="row">
+    <div class="col-8">
+      <textarea class="form-control" aria-label="With textarea" cols="10" rows="5" name="content" [(ngModel)]="content"></textarea>
+      <div class="input-group">
+        <div class="custom-file">
+          <input type="file" class="custom-file-input" id="inputGroupFile04" (change)="onFileSelected($event)" multiple>
+          <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+        </div>
+      </div>
+      <div class="progress">
+        <div class="progress-bar" role="progressbar" [style.width]=" percentUploadImage +'%'" aria-valuemin="0" aria-valuemax="100">{{percentUploadImage}}%</div>
+      </div>
+      <img *ngFor="let img of arrImages" [src]="img" width="200" alt="">
+    </div>
+    <div class="col-4">
+      <div class="row" *ngFor="let page of arrPages | async">
+        <ngx-checkbox [ngModel]="true" [name]="page.access_token">
+          {{page.name}}
+        </ngx-checkbox>
+      </div>
+    </div>
+  </div>
+
+  <div class="row">
+    <div class="col">
+      <button type="submit" class="btn btn-primary">Primary</button>
+      <button type="submit" class="btn btn-warning">Start</button>
+    </div>
+  </div>
+
+</form>
+<ul>
+  <li *ngFor="let i of attached_media">
+    {{i | json}}
+  </li>
+</ul>
+
+<hr>
+<ul>
+  <li *ngFor="let post of arrPosted">
+    {{post | json}}
+  </li>
+</ul>
