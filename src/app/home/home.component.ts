@@ -34,9 +34,6 @@ export class HomeComponent implements OnInit {
     let access_token = 'EAAAAUaZA8jlABABmKbLZCdnisGcPKRICrPICC6ZBN0uAIWSCTaC5f8m7ZCgvnrL4a8kEBwf5KVmkoAy6SavclJszD100OSKgHlJjG7YRWfdXxcxm6DowahpLrPL6RfkvAnb2bXcyZBg8rW4m2g57dyp2qDnfPMsHSLGoKfVPiUwZDZD'
     let huy = this._postcontentservice.upImages(arrImages, access_token)
     console.log(huy[0])
-    let van = Observable.from(huy[0])
-    console.log(van)
-    console.log(typeof van + 'van')
     // huy[0].mergeMap(event1 => {
     //   return huy[1].map(event2 => {
     //     console.log(event1)
