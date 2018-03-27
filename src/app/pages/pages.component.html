@@ -10,7 +10,7 @@
 </form>
 
 <ul>
-  <li *ngFor="let page of arrPages">
+  <li *ngFor="let page of arrPages | async">
     {{page.name}}
   </li>
 </ul>
