@@ -5,7 +5,7 @@ import { Observable } from 'rxjs/Observable';
 import { Http } from '@angular/http';
 import { PostcontentService } from '../service/postcontent.service';
 
-import { mergeMap } from 'rxjs/operators';
+
 
 const localToken = 'admin'
 
@@ -29,18 +29,7 @@ export class HomeComponent implements OnInit {
   ) { }
 
   ngOnInit() {
-    this.arrPages = this._db.list('postmypage/users/' + localToken + '/pages').valueChanges()
-    let arrImages = ['https://dantricdn.com/2017/thu-1504399379412.jpg', 'https://donghuongkontum.files.wordpress.com/2015/09/mc3b9a-thu-vc3a0-c3a1o-tre1baafng.jpeg'];
-    let access_token = 'EAAAAUaZA8jlABABmKbLZCdnisGcPKRICrPICC6ZBN0uAIWSCTaC5f8m7ZCgvnrL4a8kEBwf5KVmkoAy6SavclJszD100OSKgHlJjG7YRWfdXxcxm6DowahpLrPL6RfkvAnb2bXcyZBg8rW4m2g57dyp2qDnfPMsHSLGoKfVPiUwZDZD'
-    let huy = this._postcontentservice.upImages(arrImages, access_token)
-    console.log(huy[0])
-    // huy[0].mergeMap(event1 => {
-    //   return huy[1].map(event2 => {
-    //     console.log(event1)
-    //     console.log(event2)
-    //   }).subscribe(res => console.log(res))
-    // })
-
+    this.arrPages = this._db.list('postmypage/users/' + localToken + '/pages').valueChanges()    
   }
   onFileSelected(event) {
     this.attached_media = [];
@@ -53,31 +42,21 @@ export class HomeComponent implements OnInit {
         this.percentUploadImage = Math.round(percent)
       })
       taskUpload.downloadURL().subscribe(urlImage => {
+        console.log(urlImage)
         this.arrImages.push(urlImage)
-        // let option = {
-        //   access_token: 'EAAAAUaZA8jlABAFeaSeev9b8RuRUdZBg1Ov4xzTyrSABHpUtKucFtqUpCtVacRkRllbFTQrKGTPZA7EtFCt1jYsWP7AWwPB9CA5Ek1BKrmUwC5O8ZCtakpO5IVdj4sJK8mTZCAfoOd42MB8Q0A2kt3cK1u6DEBS4gFZBh3pFziNgZDZD',
-        //   published: false,
-        //   url: urlImage
-        // }
-        // this._http.post('https://graph.facebook.com/v2.11/me/photos', option).subscribe(res => {
-        //   this.attached_media.push({ media_fbid: res.json().id })
-        //   console.log(res.json())
-        // })
       })
     }
   }
 
   onFormSubmit(form) {
-
     let formvalue = (form.value)
     let content = formvalue.content
-
     Object.keys(form.value).map(access_token => {
+      console.log(access_token)
       if (formvalue[access_token] === true) {
-        // [{"media_fbid":"838987192964373"},{"media_fbid":"838987192964373"}]
-        this._postcontentservice.postContent(content, this.arrImages, access_token)
-        // this._postcontentservice.postContent(content, this.arrImages, access_token)
+        this._postcontentservice.postImages(content,this.arrImages, access_token)
       }
+      console.log('after')
     })
   }
 
