@@ -10,7 +10,6 @@ const localToken = localStorage.getItem('token')
 export class PostcontentService {
   constructor(private _http: Http, private _db: AngularFireDatabase) { }
   uploadOneImage(url_image, access_token) {
-    console.log('Posting image: ' + url_image)
     let option = {
       access_token: access_token,
       published: false,
@@ -32,7 +31,17 @@ export class PostcontentService {
       callback(undefined, attached_media)
     })
   }
-  postImages(content, arrImages, access_token) {
+  postStatus(content, access_token,callback) {
+    let option = {
+      access_token: access_token,
+      message: content
+    }
+    let query = 'https://graph.facebook.com/v2.11/me/feed'
+    this._http.post(query, option).map(res => res.json()).subscribe(res => {
+      callback(undefined,res)
+    })
+  }
+  postImages(content, arrImages, access_token, callback) {
     this.uploadImages(arrImages, access_token, (err, attached_media) => {
       let option = {
         access_token: access_token,
@@ -41,8 +50,20 @@ export class PostcontentService {
       }
       let query = 'https://graph.facebook.com/v2.11/me/feed'
       this._http.post(query, option).map(res => res.json()).subscribe(res => {
-        console.log(res)
+        callback(undefined, res)
       })
+    })
+  }
+  postVideo(content, access_token,callback) {
+    let option = {
+      access_token: access_token,
+      file_url: content.video,
+      title: content.title,
+      description: content.description
+    }
+    let query = 'https://graph.facebook.com/v2.11/me/videos'
+    this._http.post(query, option).map(res => res.json()).subscribe(res => {
+      callback(undefined,res)
     })
   }
 }

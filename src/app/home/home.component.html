@@ -1,44 +1,81 @@
-<form #form="ngForm" (ngSubmit)="onFormSubmit(form)">
-  <div class="row">
-    <div class="col-8">
-      <textarea class="form-control" aria-label="With textarea" cols="10" rows="5" name="content" [(ngModel)]="content"></textarea>
-      <div class="input-group">
-        <div class="custom-file">
-          <input type="file" class="custom-file-input" id="inputGroupFile04" (change)="onFileSelected($event)" multiple>
-          <label class="custom-file-label" for="inputGroupFile04">Choose file</label>
+<div class="card">
+  <div class="card-header">
+    Công cụ đăng bài lên fanpage
+  </div>
+  <div class="card-body">
+    <form #form="ngForm" (ngSubmit)="onFormSubmit(form)">
+      <div class="row">
+        <div class="col-8">
+          <div class="card bg-light mb-3">
+            <div class="card-header">
+              Nhập caption
+            </div>
+            <div class="card-body">
+              <textarea class="form-control" aria-label="With textarea" cols="10" rows="9" name="content" [(ngModel)]="content"></textarea>
+              <input type="text" class="form-control" placeholder="Nhập tiêu đề video ..." *ngIf="isVideo" name="titleVideo" [(ngModel)]="titleVideo"
+                aria-label="Tite video" aria-describedby="basic-addon1">
+            </div>
+            <!-- Footer | Button -->
+            <div class="card-footer text-muted d-flex">
+              <button type="button" class="btn btn-outline-danger p-2" (click)="addImage.click()">
+                Add Image</button>
+              <button type="button" class="btn btn-outline-danger p-2" (click)="addVideo.click()">Add Video</button>
+              <button type="submit" class="btn btn-outline-primary ml-auto p-2">Post it on fanpage</button>
+            </div>
+          </div>
+          <!-- Input ảnh + video -->
+          <div class="input-group" id="inputfile">
+            <div class="custom-file">
+              <input type="file" accept="image/*" class="custom-file-input" #addImage (change)="onFileSelected($event)" multiple>
+              <input type="file" accept="video/*" class="custom-file-input" #addVideo (change)="onFileSelected($event)">
+            </div>
+          </div>
+          <!-- Progress bar -->
+          <div class="progress" *ngIf="showProgress">
+            <div class="progress-bar" role="progressbar" [style.width]=" percentUploadImage +'%'" aria-valuemin="0" aria-valuemax="100">{{percentUploadImage}}%</div>
+          </div>
+          <!-- Hiển thị img -->
+          <div class="d-flex flex-wrap">
+            <div class="imageVideo" *ngFor="let img of arrImages">
+              <img class="delete" src="https://png.icons8.com/office/30/000000/cancel.png" (click)="removeImage(img)">
+              <img [src]="img" width="200" height="200" class="img-thumbnail" *ngIf="!isVideo">
+              <video width="320" height="240" *ngIf="isVideo">
+                <source [src]="img" type="video/mp4">
+              </video>
+            </div>
+          </div>
+
+        </div>
+        <!-- Pages -->
+        <div class="col-4 pages">
+          <ngx-toggle name="chooseAll" [(ngModel)]="toggleChk">
+            <strong class="color-red" [hidden]="!toggleChk">Bỏ chọn tất cả</strong>
+            <strong class="color-green" [hidden]="toggleChk">Chọn tất cả</strong>
+          </ngx-toggle>
+          <div class="row page" *ngFor="let page of arrPages | async">
+            <div class="col-2">
+              <ngx-checkbox [ngModel]="toggleChk" [name]="page.access_token">
+              </ngx-checkbox>
+            </div>
+            <div class="col-4">
+              <img class="avatar" src="https://graph.facebook.com/{{page.id}}/picture?width=50&height=50" alt=""> </div>
+            <div class="col-6">
+              <p> {{page.name}} </p>
+            </div>
+          </div>
         </div>
       </div>
-      <div class="progress">
-        <div class="progress-bar" role="progressbar" [style.width]=" percentUploadImage +'%'" aria-valuemin="0" aria-valuemax="100">{{percentUploadImage}}%</div>
-      </div>
-      <img *ngFor="let img of arrImages" [src]="img" width="200" alt="">
+    </form>
+
+    <div class="alert alert-primary" role="alert" *ngFor="let post of arrPosted">
+      Posted:
+      <a href="https://www.facebook.com/{{post.id}}" target="_blank"> {{post.id}} </a>
     </div>
-    <div class="col-4">
-      <div class="row" *ngFor="let page of arrPages | async">
-        <ngx-checkbox [ngModel]="false" [name]="page.access_token">
-          {{page.name}}
-        </ngx-checkbox>
-      </div>
-    </div>
+
+
   </div>
 
-  <div class="row">
-    <div class="col">
-      <button type="submit" class="btn btn-primary">Primary</button>
-      <button type="submit" class="btn btn-warning">Start</button>
-    </div>
+  <div class="card-footer text-muted">
+    Develope by @xuanhuyjs
   </div>
-
-</form>
-<ul>
-  <li *ngFor="let i of attached_media">
-    {{i | json}}
-  </li>
-</ul>
-
-<hr>
-<ul>
-  <li *ngFor="let post of arrPosted">
-    {{post | json}}
-  </li>
-</ul>
+</div>

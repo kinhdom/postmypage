@@ -1,3 +1,33 @@
-<p>
-  dashboard works!
-</p>
+<!-- <div >
+  <a routerLink="/detail/{{page.id}}"> {{page.name}} </a>
+</div> -->
+
+
+<table class="table">
+  <thead>
+    <tr>
+      <th scope="col">No.</th>
+      <th scope="col">Name</th>
+      <th scope="col">Description</th>
+      <th scope="col">Like</th>
+      <th scope="col">New Like</th>
+      <th scope="col">Checkins</th>
+    </tr>
+  </thead>
+  <tbody>
+    <tr *ngFor="let page of myPages; let i = index">
+      <th scope="row"> {{i+1}} </th>
+      <td>
+        <a href="https://www.facebook.com/{{page.id}}" target="_blank"> {{page.name | slice:0:20}}</a>
+      </td>
+      <td>{{page.about | slice:0:15}}</td>
+      <td>{{page.likes}}</td>
+      <td> {{page.new_like_count}} </td>
+      <td>{{page.checkins}}</td>
+      <a routerLink="/detail/{{page.id}}">
+        <button type="button" class="btn btn-info">Detail</button>
+      </a>
+    </tr>
+
+  </tbody>
+</table>

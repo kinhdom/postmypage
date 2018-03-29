@@ -14,10 +14,6 @@ export class PagesService {
     let query = 'https://graph.facebook.com/me?access_token=' + access_token
     return this._http.get(query).map(res => res.json())
   }
-
-
-
-
   html2text(html) {
     var tag = document.createElement('div');
     tag.innerHTML = html;

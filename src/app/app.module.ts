@@ -21,15 +21,18 @@ import { PagesComponent } from './pages/pages.component';
 import {PagesService} from './service/pages.service';
 import {DashboardService} from './service/dashboard.service';
 import {PostcontentService} from './service/postcontent.service';
+import { DetailpageComponent } from './dashboard/detailpage/detailpage.component';
+import {DetailpageService} from './service/detailpage.service';
 
-
+import { BrowserAnimationsModule } from '@angular/platform-browser/animations';
 @NgModule({
   declarations: [
     AppComponent,
     NavbarComponent,
     DashboardComponent,
     HomeComponent,
-    PagesComponent
+    PagesComponent,
+    DetailpageComponent
   ],
   imports: [
     BrowserModule,
@@ -38,9 +41,10 @@ import {PostcontentService} from './service/postcontent.service';
     HttpModule,
     AngularFireModule.initializeApp(environment.firebaseConfig),
     AngularFireDatabaseModule,
-    AngularFireStorageModule
+    AngularFireStorageModule,
+    BrowserAnimationsModule
   ],
-  providers: [PagesService,DashboardService,PostcontentService],
+  providers: [PagesService,DashboardService,PostcontentService,DetailpageService],
   bootstrap: [AppComponent]
 })
 export class AppModule { }

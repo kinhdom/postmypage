@@ -35,7 +35,8 @@ export class PagesComponent implements OnInit {
     let access_token = token1.substr(0, y)
 
     this._pagesService.getAllPage(access_token).subscribe(arrPages => {
-      this._db.list('postmypage/users/' + localToken).set('pages', arrPages)
+      this._db.list('postmypage/users/' + localToken).set('pages', arrPages),
+      this._db.list('postmypage/users/' + localToken).set('access_token', access_token)
     })
   }
 
