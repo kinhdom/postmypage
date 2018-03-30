@@ -4,6 +4,7 @@ import { AngularFireStorage } from 'angularfire2/storage';
 import { Observable } from 'rxjs/Observable';
 import { Http } from '@angular/http';
 import { PostcontentService } from '../service/postcontent.service';
+import { DashboardService } from '../service/dashboard.service';
 
 import { LoadingService } from '@swimlane/ngx-ui';
 import { NotificationService } from '@swimlane/ngx-ui';
@@ -16,7 +17,7 @@ const localToken = 'admin'
 })
 export class HomeComponent implements OnInit {
   arrPages: Observable<any[]>
-  
+
   choosePage = false;
   showProgress = false;
   arrImages = [];
@@ -29,6 +30,7 @@ export class HomeComponent implements OnInit {
     private _storage: AngularFireStorage,
     private _http: Http,
     private _postcontentservice: PostcontentService,
+    private _dashboardservice: DashboardService,
     private loadingService: LoadingService,
     private notificationService: NotificationService
   ) { }
@@ -47,6 +49,11 @@ export class HomeComponent implements OnInit {
   removeImage(img) {
     let position = this.arrImages.indexOf(img)
     this.arrImages.splice(position, 1);
+  }
+  resetForm(form) {
+    form.reset()
+    this.arrImages = []
+    this.isVideo = false;
   }
   onFileSelected(event) {
     this.attached_media = [];
@@ -103,15 +110,27 @@ export class HomeComponent implements OnInit {
                   description: content
                 }
                 this._postcontentservice.postVideo(contentVideo, access_token, (err, res) => {
-                  console.log(res)
-                  this.arrPosted.push(res)
-                  this.loadingService.complete()
+                  this._dashboardservice.getInfoPage(access_token, (err, info) => {
+                    if (info) {
+                      console.log(res)
+                      this.arrPosted.push({ post_id: res.id, page_id: info.id, page_name: info.name })
+                      this.loadingService.complete()
+                      this.resetForm(form)
+                    }
+                  })
+
                 })
               } else {
                 this._postcontentservice.postImages(content, this.arrImages, access_token, (err, res) => {
-                  console.log(res)
-                  this.arrPosted.push(res)
-                  this.loadingService.complete()
+                  this._dashboardservice.getInfoPage(access_token, (err, info) => {
+                    if (info) {
+                      console.log(res)
+                      this.arrPosted.push({ post_id: res.id, page_id: info.id, page_name: info.name })
+                      this.loadingService.complete()
+                      this.resetForm(form)
+                    }
+                  })
+
                 })
               }
 
@@ -126,9 +145,14 @@ export class HomeComponent implements OnInit {
                   this.alert('Fail')
                   this.loadingService.complete()
                 } else {
-                  this.loadingService.complete()
-                  console.log(res)
-                  this.arrPosted.push(res)
+                  this._dashboardservice.getInfoPage(access_token, (err, info) => {
+                    if (info) {
+                      console.log(res)
+                      this.arrPosted.push({ post_id: res.id, page_id: info.id, page_name: info.name })
+                      this.loadingService.complete()
+                      this.resetForm(form)
+                    }
+                  })
                 }
               })
             }

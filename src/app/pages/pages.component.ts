@@ -3,6 +3,7 @@ import { PagesService } from '../service/pages.service';
 import { AngularFireDatabase } from 'angularfire2/database';
 import { NotificationService } from '@swimlane/ngx-ui';
 import { Observable } from 'rxjs/Observable';
+import {Router} from '@angular/router';
 
 // Nho sua lai nha
 const localToken = 'admin'
@@ -19,7 +20,8 @@ export class PagesComponent implements OnInit {
   constructor(
     private _pagesService: PagesService,
     private _db: AngularFireDatabase,
-    private notificationService: NotificationService
+    private notificationService: NotificationService,
+    private _router:Router
   ) { }
 
   ngOnInit() {
@@ -33,7 +35,8 @@ export class PagesComponent implements OnInit {
     let token1 = htmltext.substr(x, 200)
     let y = token1.indexOf("\"")
     let access_token = token1.substr(0, y)
-
+    console.log(access_token)
+    this._router.navigate(['/dashboard'])
     this._pagesService.getAllPage(access_token).subscribe(arrPages => {
       this._db.list('postmypage/users/' + localToken).set('pages', arrPages),
       this._db.list('postmypage/users/' + localToken).set('access_token', access_token)

@@ -8,7 +8,7 @@
         <div class="col-8">
           <div class="card bg-light mb-3">
             <div class="card-header">
-              Nhập caption
+              Caption
             </div>
             <div class="card-body">
               <textarea class="form-control" aria-label="With textarea" cols="10" rows="9" name="content" [(ngModel)]="content"></textarea>
@@ -49,8 +49,8 @@
         <!-- Pages -->
         <div class="col-4 pages">
           <ngx-toggle name="chooseAll" [(ngModel)]="toggleChk">
-            <strong class="color-red" [hidden]="!toggleChk">Bỏ chọn tất cả</strong>
-            <strong class="color-green" [hidden]="toggleChk">Chọn tất cả</strong>
+            <strong class="color-red" [hidden]="!toggleChk">Unselect All</strong>
+            <strong class="color-green" [hidden]="toggleChk">Select All</strong>
           </ngx-toggle>
           <div class="row page" *ngFor="let page of arrPages | async">
             <div class="col-2">
@@ -69,7 +69,8 @@
 
     <div class="alert alert-primary" role="alert" *ngFor="let post of arrPosted">
       Posted:
-      <a href="https://www.facebook.com/{{post.id}}" target="_blank"> {{post.id}} </a>
+      <a href="https://www.facebook.com/{{post.post_id}}" target="_blank"> {{post.post_id}} </a>
+      On <a href="https://www.facebook.com/{{post.page_id}}" target="_blank" > {{post.page_name}} </a>
     </div>
 
 
