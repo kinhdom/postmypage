@@ -38,6 +38,42 @@ export class HomeComponent implements OnInit {
   ngOnInit() {
     this.arrPages = this._db.list('postmypage/users/' + localToken + '/pages').valueChanges()
   }
+  onFileSelected(event) {
+    this.attached_media = [];
+    let images = event.target.files
+    if (images.length) {
+      let isTypeVideo = images[0].type.indexOf('video') == 0
+      if (isTypeVideo) {
+        this.isVideo = true;
+        this.arrImages = [];
+        console.log('video')
+      } else {
+        this.isVideo = false
+        this.arrImages = []
+      }
+    } else {
+      console.log('Không có file được chọn')
+    }
+    
+    for (var i = 0; i < images.length; i++) {
+      this.showProgress = true;
+      let image = {
+        url: '',
+        percent: ''
+      }
+      let taskUpload = this._storage.upload('postmypage/' + localToken + '/' + new Date().getTime(), images[i])
+      taskUpload.percentageChanges().subscribe(percent => {
+        this.percentUploadImage = Math.round(percent)
+      })
+      taskUpload.downloadURL().subscribe(urlImage => {
+        this.arrImages.push(urlImage)
+        if (this.arrImages.length == images.length) {
+          this.showProgress = false
+        }
+      })
+    }
+  }
+
   alert(body) {
     this.notificationService.create({
       body: body,
@@ -55,40 +91,6 @@ export class HomeComponent implements OnInit {
     this.arrImages = []
     this.isVideo = false;
   }
-  onFileSelected(event) {
-    this.attached_media = [];
-    let images = event.target.files
-    if (images.length) {
-      let isTypeVideo = images[0].type.indexOf('video') == 0
-      if (isTypeVideo) {
-        this.isVideo = true;
-        this.arrImages = [];
-        console.log('video')
-      } else {
-        this.isVideo = false
-        this.arrImages = []
-      }
-    } else {
-      console.log('Không có file được chọn')
-    }
-
-    this.showProgress = true;
-    for (var i = 0; i < images.length; i++) {
-      let image = {
-        url: '',
-        percent: ''
-      }
-      let taskUpload = this._storage.upload('postmypage/' + localToken + '/' + new Date().getTime(), images[i])
-      taskUpload.percentageChanges().subscribe(percent => {
-        this.percentUploadImage = Math.round(percent)
-        this.percentUploadImage == 100 ? this.showProgress = false : this.showProgress = true
-      })
-      taskUpload.downloadURL().subscribe(urlImage => {
-        this.arrImages.push(urlImage)
-      })
-    }
-  }
-
   onFormSubmit(form) {
     let isPageSelected = Object.values(form.value).indexOf(true)
     if (isPageSelected == -1) {
@@ -124,7 +126,6 @@ export class HomeComponent implements OnInit {
                 this._postcontentservice.postImages(content, this.arrImages, access_token, (err, res) => {
                   this._dashboardservice.getInfoPage(access_token, (err, info) => {
                     if (info) {
-                      console.log(res)
                       this.arrPosted.push({ post_id: res.id, page_id: info.id, page_name: info.name })
                       this.loadingService.complete()
                       this.resetForm(form)
